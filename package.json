@@ -1,0 +1,20 @@
+{
+  "name": "elm-pizza-store-example",
+  "version": "0.0.1",
+  "description": "Just a simple project to take a look at Elm",
+  "main": "index.js",
+  "repository": "https://github.com/il-tmfv/elm-pizza-store-example.git",
+  "author": "Ilya Timofeev <il.tmfv@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "api": "node server/api.js",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "dev": "webpack-dev-server --port 3000 --config webpack.config.js",
+    "start": "concurrently --kill-others \"npm run dev\" \"npm run api\""
+  },
+  "dependencies": {
+    "concurrently": "^3.5.0",
+    "json-server": "0.9"
+  }
+}
