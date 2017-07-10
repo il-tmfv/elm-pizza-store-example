@@ -5,7 +5,7 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required)
 import Json.Encode as Encode
 import Msgs exposing (Msg)
-import Models exposing (PlayerId, Player)
+import Models exposing (PizzaId, Pizza)
 import RemoteData
 
 
@@ -13,20 +13,20 @@ fetchPlayers : Cmd Msg
 fetchPlayers =
     Http.get fetchPlayersUrl playersDecoder
         |> RemoteData.sendRequest
-        |> Cmd.map Msgs.OnFetchPlayers
+        |> Cmd.map Msgs.OnFetchPizzas
 
 
 fetchPlayersUrl : String
 fetchPlayersUrl =
-    "http://localhost:4000/players"
+    "http://localhost:4000/pizzas"
 
 
-savePlayerUrl : PlayerId -> String
+savePlayerUrl : PizzaId -> String
 savePlayerUrl playerId =
-    "http://localhost:4000/players/" ++ playerId
+    "http://localhost:4000/pizzas/" ++ playerId
 
 
-savePlayerRequest : Player -> Http.Request Player
+savePlayerRequest : Pizza -> Http.Request Pizza
 savePlayerRequest player =
     Http.request
         { body = playerEncoder player |> Http.jsonBody
@@ -39,36 +39,36 @@ savePlayerRequest player =
         }
 
 
-savePlayerCmd : Player -> Cmd Msg
+savePlayerCmd : Pizza -> Cmd Msg
 savePlayerCmd player =
     savePlayerRequest player
-        |> Http.send Msgs.OnPlayerSave
+        |> Http.send Msgs.OnPizzaSave
 
 
 
 -- DECODERS
 
 
-playersDecoder : Decode.Decoder (List Player)
+playersDecoder : Decode.Decoder (List Pizza)
 playersDecoder =
     Decode.list playerDecoder
 
 
-playerDecoder : Decode.Decoder Player
+playerDecoder : Decode.Decoder Pizza
 playerDecoder =
-    decode Player
+    decode Pizza
         |> required "id" Decode.string
         |> required "name" Decode.string
-        |> required "level" Decode.int
+        |> required "price" Decode.int
 
 
-playerEncoder : Player -> Encode.Value
+playerEncoder : Pizza -> Encode.Value
 playerEncoder player =
     let
         attributes =
             [ ( "id", Encode.string player.id )
             , ( "name", Encode.string player.name )
-            , ( "level", Encode.int player.level )
+            , ( "level", Encode.int player.price )
             ]
     in
         Encode.object attributes

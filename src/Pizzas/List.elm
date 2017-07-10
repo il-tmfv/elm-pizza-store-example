@@ -1,14 +1,14 @@
-module Players.List exposing (..)
+module Pizzas.List exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
-import Models exposing (Player)
+import Models exposing (Pizza)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
-import Routing exposing (playerPath)
+import Routing exposing (pizzaPath)
 
 
-view : WebData (List Player) -> Html Msg
+view : WebData (List Pizza) -> Html Msg
 view response =
     div []
         [ nav
@@ -19,10 +19,10 @@ view response =
 nav : Html Msg
 nav =
     div [ class "clearfix mb2 white bg-black" ]
-        [ div [ class "left p2" ] [ text "Players" ] ]
+        [ div [ class "left p2" ] [ text "Pizzas" ] ]
 
 
-maybeList : WebData (List Player) -> Html Msg
+maybeList : WebData (List Pizza) -> Html Msg
 maybeList response =
     case response of
         RemoteData.NotAsked ->
@@ -31,46 +31,46 @@ maybeList response =
         RemoteData.Loading ->
             text "Loading..."
 
-        RemoteData.Success players ->
-            list players
+        RemoteData.Success pizzas ->
+            list pizzas
 
         RemoteData.Failure error ->
             text (toString error)
 
 
-list : List Player -> Html Msg
-list players =
+list : List Pizza -> Html Msg
+list pizzas =
     div [ class "p2" ]
         [ table []
             [ thead []
                 [ tr []
                     [ th [] [ text "Id" ]
                     , th [] [ text "Name" ]
-                    , th [] [ text "Level" ]
+                    , th [] [ text "Price" ]
                     , th [] [ text "Actions" ]
                     ]
                 ]
-            , tbody [] (List.map playerRow players)
+            , tbody [] (List.map pizzaRow pizzas)
             ]
         ]
 
 
-playerRow : Player -> Html Msg
-playerRow player =
+pizzaRow : Pizza -> Html Msg
+pizzaRow pizza =
     tr []
-        [ td [] [ text player.id ]
-        , td [] [ text player.name ]
-        , td [] [ text (toString player.level) ]
+        [ td [] [ text pizza.id ]
+        , td [] [ text pizza.name ]
+        , td [] [ text (toString pizza.price) ]
         , td []
-            [ editBtn player ]
+            [ editBtn pizza ]
         ]
 
 
-editBtn : Player -> Html.Html Msg
-editBtn player =
+editBtn : Pizza -> Html.Html Msg
+editBtn pizza =
     let
         path =
-            playerPath player.id
+            pizzaPath pizza.id
     in
         a
             [ class "btn regular"

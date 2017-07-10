@@ -1,7 +1,7 @@
 module Update exposing (..)
 
 import Commands exposing (savePlayerCmd)
-import Models exposing (Model, Player)
+import Models exposing (Model, Pizza)
 import Msgs exposing (Msg)
 import Routing exposing (parseLocation)
 import RemoteData
@@ -10,8 +10,8 @@ import RemoteData
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Msgs.OnFetchPlayers response ->
-            ( { model | players = response }, Cmd.none )
+        Msgs.OnFetchPizzas response ->
+            ( { model | pizzas = response }, Cmd.none )
 
         Msgs.OnLocationChange location ->
             let
@@ -20,33 +20,33 @@ update msg model =
             in
                 ( { model | route = newRoute }, Cmd.none )
 
-        Msgs.ChangeLevel player howMuch ->
+        Msgs.ChangeLevel pizza howMuch ->
             let
-                updatedPlayer =
-                    { player | level = player.level + howMuch }
+                updatedPizza =
+                    { pizza | price = pizza.price + howMuch }
             in
-                ( model, savePlayerCmd updatedPlayer )
+                ( model, savePlayerCmd updatedPizza )
 
-        Msgs.OnPlayerSave (Ok player) ->
-            ( updatePlayer model player, Cmd.none )
+        Msgs.OnPizzaSave (Ok pizza) ->
+            ( updatePlayer model pizza, Cmd.none )
 
-        Msgs.OnPlayerSave (Err error) ->
+        Msgs.OnPizzaSave (Err error) ->
             ( model, Cmd.none )
 
 
-updatePlayer : Model -> Player -> Model
-updatePlayer model updatedPlayer =
+updatePlayer : Model -> Pizza -> Model
+updatePlayer model updatedPizza =
     let
-        pick currentPlayer =
-            if updatedPlayer.id == currentPlayer.id then
-                updatedPlayer
+        pick currentPizza =
+            if updatedPizza.id == currentPizza.id then
+                updatedPizza
             else
-                currentPlayer
+                currentPizza
 
-        updatePlayerList players =
-            List.map pick players
+        updatePizzaList pizzas =
+            List.map pick pizzas
 
-        updatedPlayers =
-            RemoteData.map updatePlayerList model.players
+        updatedPizzas =
+            RemoteData.map updatePizzaList model.pizzas
     in
-        { model | players = updatedPlayers }
+        { model | pizzas = updatedPizzas }

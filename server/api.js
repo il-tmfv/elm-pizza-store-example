@@ -5,7 +5,7 @@ var server = jsonServer.create();
 
 server.use(jsonServer.defaults());
 
-var router = jsonServer.router('db.json');
+var router = jsonServer.router('server/db.json');
 
 server.use(router);
 console.log('Listening at 4000');
