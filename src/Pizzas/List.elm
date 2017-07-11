@@ -1,7 +1,7 @@
 module Pizzas.List exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (class, href)
+import Html.Attributes exposing (class, href, attribute)
 import Models exposing (Pizza)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
@@ -18,8 +18,8 @@ view response =
 
 nav : Html Msg
 nav =
-    div [ class "clearfix mb2 white bg-black" ]
-        [ div [ class "left p2" ] [ text "Pizzas" ] ]
+    div []
+        [ div [ class "mdc-typography--headline" ] [ text "Pizzas" ] ]
 
 
 maybeList : WebData (List Pizza) -> Html Msg
@@ -29,7 +29,7 @@ maybeList response =
             text ""
 
         RemoteData.Loading ->
-            text "Loading..."
+            progressBar
 
         RemoteData.Success pizzas ->
             list pizzas
@@ -38,16 +38,31 @@ maybeList response =
             text (toString error)
 
 
+progressBar : Html msg
+progressBar =
+    div [ class "mdc-linear-progress mdc-linear-progress--indeterminate", attribute "role" "progressbar" ]
+        [ div [ class "mdc-linear-progress__buffering-dots" ] []
+        , div [ class "mdc-linear-progress__buffer" ] []
+        , div [ class "mdc-linear-progress__bar mdc-linear-progress__primary-bar" ]
+            [ span [ class "mdc-linear-progress__bar-inner" ] []
+            ]
+        , div
+            [ class "mdc-linear-progress__bar mdc-linear-progress__secondary-bar" ]
+            [ span [ class "mdc-linear-progress__bar-inner" ] []
+            ]
+        ]
+
+
 list : List Pizza -> Html Msg
 list pizzas =
     div [ class "p2" ]
         [ table []
             [ thead []
                 [ tr []
-                    [ th [] [ text "Id" ]
-                    , th [] [ text "Name" ]
-                    , th [] [ text "Price" ]
-                    , th [] [ text "Actions" ]
+                    [ th [ class "mdc-typography--subheading1" ] [ text "Id" ]
+                    , th [ class "mdc-typography--subheading1" ] [ text "Name" ]
+                    , th [ class "mdc-typography--subheading1" ] [ text "Price" ]
+                    , th [ class "mdc-typography--subheading1" ] [ text "Actions" ]
                     ]
                 ]
             , tbody [] (List.map pizzaRow pizzas)
@@ -58,10 +73,10 @@ list pizzas =
 pizzaRow : Pizza -> Html Msg
 pizzaRow pizza =
     tr []
-        [ td [] [ text pizza.id ]
-        , td [] [ text pizza.name ]
-        , td [] [ text (toString pizza.price) ]
-        , td []
+        [ td [ class "mdc-typography--body1" ] [ text pizza.id ]
+        , td [ class "mdc-typography--body1" ] [ text pizza.name ]
+        , td [ class "mdc-typography--body1" ] [ text (toString pizza.price) ]
+        , td [ class "mdc-typography--body1" ]
             [ editBtn pizza ]
         ]
 

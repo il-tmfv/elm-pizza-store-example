@@ -17,6 +17,10 @@ module.exports = {
         loaders: ['style-loader', 'css-loader'],
       },
       {
+        test: /material\-components\-web\.js$/,
+        loaders: ['script-loader'],
+      },
+      {
         test: /\.html$/,
         exclude: /node_modules/,
         loader: 'file-loader?name=[name].[ext]',

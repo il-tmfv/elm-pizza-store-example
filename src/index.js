@@ -1,6 +1,6 @@
 'use strict';
-//require('ace-css/css/ace.css');
-//require('font-awesome/css/font-awesome.css'); // Require index.html so it gets copied to dist
+require('material-components-web/dist/material-components-web.css');
+require('material-components-web/dist/material-components-web.js'); // Require index.html so it gets copied to dist
 require('./index.html');
 
 var Elm = require('./Main.elm');
